@@ -1,4 +1,4 @@
-# note_bad
+# Note Bad
 
 A new Notes Flutter application
 

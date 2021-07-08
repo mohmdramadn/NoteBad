@@ -3,12 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:note_bad/Services/NoteModel.dart';
 
 final _lightColors = [
-  Colors.amber.shade300,
+  Colors.yellow.shade600,
   Colors.lightGreen.shade300,
-  Colors.lightBlue.shade300,
+  Colors.blueAccent.shade200,
   Colors.orange.shade300,
   Colors.pinkAccent.shade100,
-  Colors.tealAccent.shade100
+  Colors.deepPurpleAccent.shade200,
 ];
 
 
@@ -52,7 +52,8 @@ class NotesCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -64,7 +65,7 @@ class NotesCard extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -76,8 +77,8 @@ class NotesCard extends StatelessWidget {
                 child: Text(
                   time,
                   style: TextStyle(
-                    color: Colors.white30,
-                    fontSize: 10,
+                    color: Colors.white70,
+                    fontSize: 12,
                   ),
                 ),
               ),

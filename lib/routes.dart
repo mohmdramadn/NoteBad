@@ -17,6 +17,7 @@ class _RoutesState extends State<Routes> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: appTitle,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       initialRoute: HomePage.pageId,
       routes: {

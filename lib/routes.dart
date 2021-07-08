@@ -5,6 +5,7 @@ import 'package:note_bad/Modules/HomeModule/bloc/HomeStates.dart';
 import 'package:note_bad/Modules/HomeModule/views/HomeScreen.dart';
 import 'package:note_bad/Modules/NoteModule/views/NoteScreen.dart';
 import 'package:note_bad/Resources/constant_strings.dart';
+import 'package:note_bad/Services/NotesDatabase.dart';
 
 class Routes extends StatefulWidget {
   @override
@@ -23,5 +24,10 @@ class _RoutesState extends State<Routes> {
         NotePage.pageId: (context) => NotePage()
       },
     );
+  }
+  @override
+  void dispose() {
+    NotesDatabase.instance.close();
+    super.dispose();
   }
 }

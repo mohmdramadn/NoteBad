@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-      print(state);
       if (state is InitialState) {
         //notes = state.notes;
       } else if (state is NewNoteSelectedState) {
@@ -70,20 +69,29 @@ class _HomePageState extends State<HomePage> {
           title: Text(
             appTitle,
           ),
-          actions: [IconButton(icon: Icon(Icons.refresh), onPressed: () {
-            loadNotes();
-          })],
+          actions: [
+            IconButton(
+                icon: Icon(Icons.refresh),
+                tooltip: 'Refresh',
+                onPressed: () {
+                  loadNotes();
+                })
+          ],
         ),
         body: isLoading
             ? Center(
-                child: Column(
-                children: [
-                  CircularProgressIndicator(),
-                  Text(
-                    'Loading Home',
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text(
+                        'Loading Home',
+                      ),
+                    ],
                   ),
-                ],
-              ))
+                ),
+              )
             : notes != null
                 ? StaggeredGridView.countBuilder(
                     padding: EdgeInsets.all(8.0),

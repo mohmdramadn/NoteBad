@@ -43,12 +43,18 @@ class _NotePageState extends State<NotePage> {
             return _buildNewNoteWidget();
           } else if (state is EditNoteState) {
             return isLoading
-                ? Center(child: Column(
-                  children: [
-                    CircularProgressIndicator(),
-                    Text('Loading Home ...'),
-                  ],
-                ))
+                ? Scaffold(
+                    appBar: AppBar(
+                      title: Text('Edit Note'),
+                    ),
+                    body: Center(
+                        child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text('Loading Home ...'),
+                      ],
+                    )),
+                  )
                 : _buildExistingNoteWidget();
           }
 //          else if(state is SaveNewNoteState){
@@ -65,13 +71,12 @@ class _NotePageState extends State<NotePage> {
 
   Widget _buildNewNoteWidget() {
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
           IconButton(
             icon: Icon(Icons.save),
             tooltip: 'Save',
-            onPressed: () async{
+            onPressed: () async {
               BlocProvider.of<HomeBloc>(context).add(InitiateHome());
               BlocProvider.of<NoteBloc>(context).add(
                 SaveNewNote(
@@ -81,8 +86,9 @@ class _NotePageState extends State<NotePage> {
                 ),
               );
               Navigator.pop(context);
-              await Navigator.pushNamedAndRemoveUntil(context, HomePage.pageId,(r)=>false);
-              setState((){});
+              await Navigator.pushNamedAndRemoveUntil(
+                  context, HomePage.pageId, (r) => false);
+              setState(() {});
             },
           ),
         ],
@@ -134,71 +140,82 @@ class _NotePageState extends State<NotePage> {
   }
 
   Widget _buildExistingNoteWidget() {
+    _titleController.text = notes.title;
+    _contentController.text = notes.description;
     return Scaffold(
+      //resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
-            tooltip: 'Delete',
-            onPressed: () {
-              _showMyDialog();
+            icon: Icon(Icons.save_alt),
+            tooltip: 'Update',
+            onPressed: () async {
+              //BlocProvider.of<HomeBloc>(context).add(InitiateHome());
+              BlocProvider.of<NoteBloc>(context).add(
+                SaveEditsNote(
+                  widget.noteId,
+                  _titleController.text,
+                  _contentController.text,
+                  DateTime.now(),
+                ),
+              );
+              final note = Note(
+                id: widget.noteId,
+                title: _titleController.text,
+                description: _contentController.text,
+                createdDate: DateTime.now(),
+              );
+              await NotesDatabase.instance.update(note);
+              Navigator.pop(context);
+              await Navigator.pushNamedAndRemoveUntil(
+                  context, HomePage.pageId, (r) => false);
+              setState(() {});
             },
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      notes.title,
-                      style: TextStyle(
-                        fontSize: 40,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _titleController,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  //SizedBox(height: 15,),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      DateFormat.yMMMd().format(notes.createdDate),
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.4),
-                        fontSize: 12,
-                      ),
-                    ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        notes.description,
-                        maxLines: null,
-                        style: TextStyle(),
-                      ),
+                  child: TextFormField(
+                    //initialValue: notes.description,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    maxLines: null,
+                    controller: _contentController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -206,7 +223,7 @@ class _NotePageState extends State<NotePage> {
   Future loadData(int index) async {
     if (index != null) {
       setState(() => isLoading = true);
-      this.notes =  await NotesDatabase.instance.readNote(index);
+      this.notes = await NotesDatabase.instance.readNote(index);
       setState(() => isLoading = false);
     }
   }
@@ -239,13 +256,14 @@ class _NotePageState extends State<NotePage> {
                   color: Colors.red,
                 ),
               ),
-              onPressed: () async{
+              onPressed: () async {
                 BlocProvider.of<HomeBloc>(context).add(InitiateHome());
                 BlocProvider.of<NoteBloc>(context)
                     .add(DeleteCurrentNote(notes.id));
                 Navigator.pop(context);
-                await Navigator.pushNamedAndRemoveUntil(context, HomePage.pageId,(r)=>false);
-                setState((){});
+                await Navigator.pushNamedAndRemoveUntil(
+                    context, HomePage.pageId, (r) => false);
+                setState(() {});
               },
             ),
           ],

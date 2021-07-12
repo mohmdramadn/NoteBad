@@ -41,4 +41,14 @@ class DeleteCurrentNote extends NoteEvent {
   List<Object> get props => [noteIndex];
 }
 
-class SaveEditsNote extends NoteEvent {}
+class SaveEditsNote extends NoteEvent {
+  final String noteTitle;
+  final String noteBody;
+  final DateTime time;
+  final int id;
+
+  SaveEditsNote(@required this.id,@required this.noteTitle, @required this.noteBody,@required this.time);
+
+  @override
+  List<Object> get props => [noteTitle, noteBody];
+}

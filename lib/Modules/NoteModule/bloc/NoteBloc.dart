@@ -7,13 +7,10 @@ import 'package:note_bad/Services/NotesDatabase.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
   NoteBloc() : super(NoteState());
-  //Note notes;
-
-  //NotesDatabase db ;
   @override
   Stream<NoteState> mapEventToState(NoteEvent event) async* {
+    print(event);
     if (event is CreateNewNote) {
-
       yield CreateNewNoteState();
     } else if (event is SaveEditsNote) {
       yield SaveEditsNoteState();
@@ -22,10 +19,16 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     } else if (event is EditNote) {
       yield EditNoteState(event.noteIndex);
     } else if (event is DeleteCurrentNote) {
-      print('Bloc >>> ${event.noteIndex}');
       await NotesDatabase.instance.delete(event.noteIndex);
       yield DeleteNoteState();
     } else if (event is SaveEditsNote) {
+      final notes = Note(
+        id: event.id,
+        title: event.noteTitle,
+        description: event.noteBody,
+        createdDate: event.time,
+      );
+      await NotesDatabase.instance.update(notes);
       yield SaveEditsNoteState();
     } else if (event is SaveNewNote) {
       final note =

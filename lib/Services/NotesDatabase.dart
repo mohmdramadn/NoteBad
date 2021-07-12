@@ -57,6 +57,7 @@ class NotesDatabase {
 
   Future<int> update(Note note) async {
     final db = await instance.database;
+    print('${note.id}>>>>>>>>>><<<<<<<<<<');
     return db.update(
       tableNotes,
       note.toJson(),

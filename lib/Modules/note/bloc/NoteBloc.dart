@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:note_bad/Modules/NoteModule/bloc/NoteEvent.dart';
-import 'package:note_bad/Modules/NoteModule/bloc/NoteState.dart';
-import 'package:note_bad/Services/NoteModel.dart';
-import 'package:note_bad/Services/NotesDatabase.dart';
+import 'package:note_bad/Models/note.dart';
+import 'package:note_bad/Modules/note/bloc/NoteEvent.dart';
+import 'package:note_bad/Modules/note/bloc/NoteState.dart';
+import 'package:note_bad/Services/notes_database.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
   NoteBloc() : super(NoteState());

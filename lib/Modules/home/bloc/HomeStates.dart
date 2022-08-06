@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:note_bad/Services/NoteModel.dart';
+import 'package:note_bad/Models/note.dart';
 class HomeState extends Equatable{
   @override
   List<Object> get props => [];

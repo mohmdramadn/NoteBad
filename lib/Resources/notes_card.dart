@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:note_bad/Services/NoteModel.dart';
+import 'package:note_bad/Models/note.dart';
 
 final _lightColors = [
   Colors.yellow.shade600,

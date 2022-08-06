@@ -1,4 +1,4 @@
-import 'package:note_bad/Services/NoteModel.dart';
+import 'package:note_bad/Models/note.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

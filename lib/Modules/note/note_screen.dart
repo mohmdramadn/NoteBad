@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:note_bad/Modules/HomeModule/bloc/HomeBloc.dart';
-import 'package:note_bad/Modules/HomeModule/bloc/HomeEvents.dart';
-import 'package:note_bad/Modules/HomeModule/views/HomeScreen.dart';
-import 'package:note_bad/Modules/NoteModule/bloc/NoteBloc.dart';
-import 'package:note_bad/Modules/NoteModule/bloc/NoteEvent.dart';
-import 'package:note_bad/Modules/NoteModule/bloc/NoteState.dart';
-import 'package:note_bad/Services/NoteModel.dart';
-import 'package:note_bad/Services/NotesDatabase.dart';
+import 'package:note_bad/Models/note.dart';
+import 'package:note_bad/Modules/home/bloc/HomeBloc.dart';
+import 'package:note_bad/Modules/home/bloc/HomeEvents.dart';
+import 'package:note_bad/Modules/note/bloc/NoteBloc.dart';
+import 'package:note_bad/Modules/note/bloc/NoteEvent.dart';
+import 'package:note_bad/Modules/note/bloc/NoteState.dart';
+import 'package:note_bad/Services/notes_database.dart';
 
 class NotePage extends StatefulWidget {
   static final String pageId = 'note';
@@ -86,9 +84,9 @@ class _NotePageState extends State<NotePage> {
                 ),
               );
               Navigator.pop(context);
-              await Navigator.pushNamedAndRemoveUntil(
-                  context, HomePage.pageId, (r) => false);
-              setState(() {});
+              // await Navigator.pushNamedAndRemoveUntil(
+              //     context, HomePage.pageId, (r) => false);
+              // setState(() {});
             },
           ),
         ],
@@ -150,7 +148,6 @@ class _NotePageState extends State<NotePage> {
             icon: Icon(Icons.save_alt),
             tooltip: 'Update',
             onPressed: () async {
-              //BlocProvider.of<HomeBloc>(context).add(InitiateHome());
               BlocProvider.of<NoteBloc>(context).add(
                 SaveEditsNote(
                   widget.noteId,
@@ -167,9 +164,9 @@ class _NotePageState extends State<NotePage> {
               );
               await NotesDatabase.instance.update(note);
               Navigator.pop(context);
-              await Navigator.pushNamedAndRemoveUntil(
-                  context, HomePage.pageId, (r) => false);
-              setState(() {});
+              // await Navigator.pushNamedAndRemoveUntil(
+              //     context, HomePage.pageId, (r) => false);
+              // setState(() {});
             },
           ),
         ],
@@ -261,9 +258,9 @@ class _NotePageState extends State<NotePage> {
                 BlocProvider.of<NoteBloc>(context)
                     .add(DeleteCurrentNote(notes.id));
                 Navigator.pop(context);
-                await Navigator.pushNamedAndRemoveUntil(
-                    context, HomePage.pageId, (r) => false);
-                setState(() {});
+                // await Navigator.pushNamedAndRemoveUntil(
+                //     context, HomePage.pageId, (r) => false);
+                // setState(() {});
               },
             ),
           ],

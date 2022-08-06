@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:note_bad/Modules/HomeModule/bloc/HomeEvents.dart';
-import 'package:note_bad/Modules/HomeModule/bloc/HomeStates.dart';
-import 'package:note_bad/Services/NoteModel.dart';
-import 'package:note_bad/Services/NotesDatabase.dart';
+import 'package:note_bad/Models/note.dart';
+import 'package:note_bad/Modules/home/bloc/HomeEvents.dart';
+import 'package:note_bad/Modules/home/bloc/HomeStates.dart';
+import 'package:note_bad/Services/notes_database.dart';
+
 class HomeBloc extends Bloc<HomeEvent,HomeState>{
   HomeBloc() : super(HomeState());
   List<Note> notes=[];

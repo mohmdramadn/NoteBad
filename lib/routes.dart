@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
-// import 'package:note_bad/Modules/home/home_screen.dart';
-// import 'package:note_bad/Modules/note/note_screen.dart';
+// import 'package:note_bad/screens/home/home_screen.dart';
+// import 'package:note_bad/screens/note/note_screen.dart';
 // import 'package:note_bad/Resources/constant_strings.dart';
 // import 'package:note_bad/Services/notes_database.dart';
 //

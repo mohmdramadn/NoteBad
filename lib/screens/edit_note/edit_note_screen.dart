@@ -1,40 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:note_bad/Modules/note/add_note/add_note_view_model.dart';
 import 'package:note_bad/Resources/constant_strings.dart';
+import 'package:note_bad/screens/edit_note/edit_note_view_model.dart';
 import 'package:provider/provider.dart';
 
-class AddNotePage extends StatefulWidget {
-  const AddNotePage({Key key}) : super(key: key);
+class EditNotePage extends StatefulWidget {
+  final int noteId;
+
+  const EditNotePage({Key key, @required this.noteId}) : super(key: key);
 
   @override
-  _AddNotePageState createState() => _AddNotePageState();
+  _EditNotePageState createState() => _EditNotePageState();
 }
 
-class _AddNotePageState extends State<AddNotePage> {
+class _EditNotePageState extends State<EditNotePage> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AddNoteViewModel>(
-      create: (_) => AddNoteViewModel(),
-      builder: (context, child) => _Body(),
+    return ChangeNotifierProvider<EditNoteViewModel>(
+      create: (_) => EditNoteViewModel(noteId: widget.noteId),
+      builder: (context, child) => _Body(noteId: widget.noteId),
       lazy: true,
     );
   }
 }
 
-class _Body extends StatelessWidget {
-  const _Body({Key key}) : super(key: key);
+class _Body extends StatefulWidget {
+  final int noteId;
+
+  const _Body({Key key, @required this.noteId}) : super(key: key);
+
+  @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  @override
+  void initState() {
+    Future.microtask(
+        () => context.read<EditNoteViewModel>().loadNoteAsync(widget.noteId));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.save_alt),
+        color: Colors.blue,
+        tooltip: 'Update',
+        onPressed: () => context.read<EditNoteViewModel>().onUpdateNoteAction(),
+      ),
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            tooltip: save,
-            onPressed: () async {},
-          ),
-        ],
+        title: Text(appTitle),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -55,7 +71,7 @@ class _NoteContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vm = context.watch<AddNoteViewModel>();
+    var vm = context.watch<EditNoteViewModel>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -64,12 +80,11 @@ class _NoteContent extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.newline,
+            textInputAction: TextInputAction.done,
             maxLines: null,
             controller: vm.contentController,
             decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: whatIsOnYourMind,
             ),
           ),
         ),
@@ -85,7 +100,7 @@ class _NoteTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vm = context.watch<AddNoteViewModel>();
+    var vm = context.watch<EditNoteViewModel>();
 
     return Container(
       child: Padding(
@@ -98,8 +113,8 @@ class _NoteTitle extends StatelessWidget {
               child: TextFormField(
                 controller: vm.titleController,
                 decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    hintText: noteTitle),
+                  border: UnderlineInputBorder(),
+                ),
               ),
             ),
           ],

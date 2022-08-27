@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:note_bad/Models/note.dart';
 
 final _lightColors = [
-  Colors.yellow.shade600,
-  Colors.lightGreen.shade300,
+  Colors.purple.shade300,
+  Colors.pink.shade400,
   Colors.blueAccent.shade200,
-  Colors.orange.shade300,
+  Colors.teal.shade300,
   Colors.pinkAccent.shade100,
   Colors.deepPurpleAccent.shade200,
 ];

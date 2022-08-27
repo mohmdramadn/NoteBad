@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:note_bad/Modules/home/home_screen.dart';
-import 'package:note_bad/Modules/note/add_note/add_note_screen.dart';
-import 'package:note_bad/Modules/note/edit_note/edit_note_screen.dart';
-import 'package:note_bad/Modules/note/note_screen.dart';
-import 'package:note_bad/Modules/splash/splash_screen.dart';
 import 'package:note_bad/routes/router_names.dart';
+import 'package:note_bad/screens/add_note/add_note_screen.dart';
+import 'package:note_bad/screens/edit_note/edit_note_screen.dart';
+import 'package:note_bad/screens/home/home_screen.dart';
+import 'package:note_bad/screens/splash/splash_screen.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -14,7 +13,8 @@ Route onGenerateRoute(RouteSettings settings) {
 
     case addNoteRoute:
       return MaterialPageRoute(
-          builder: (context) => AddNotePage(), settings: settings);
+          builder: (context) => AddNotePage(),
+          settings: settings);
 
     case editNoteRoute:
       return MaterialPageRoute(

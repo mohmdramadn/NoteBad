@@ -1,63 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:note_bad/Modules/note/edit_note/edit_note_view_model.dart';
+import 'package:note_bad/Resources/constant_strings.dart';
+import 'package:note_bad/screens/add_note/add_note_view_model.dart';
 import 'package:provider/provider.dart';
 
-class EditNotePage extends StatefulWidget {
-  final int noteId;
-
-  const EditNotePage({Key key, @required this.noteId}) : super(key: key);
+class AddNotePage extends StatefulWidget {
+  const AddNotePage({Key key}) : super(key: key);
 
   @override
-  _EditNotePageState createState() => _EditNotePageState();
+  _AddNotePageState createState() => _AddNotePageState();
 }
 
-class _EditNotePageState extends State<EditNotePage> {
+class _AddNotePageState extends State<AddNotePage> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<EditNoteViewModel>(
-      create: (_) => EditNoteViewModel(),
+    return ChangeNotifierProvider<AddNoteViewModel>(
+      create: (_) => AddNoteViewModel(),
       builder: (context, child) => _Body(),
       lazy: true,
     );
   }
 }
 
-class _Body extends StatefulWidget {
-  final int noteId;
-
-  const _Body({Key key, @required this.noteId}) : super(key: key);
-
-  @override
-  State<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends State<_Body> {
-  @override
-  void initState() {
-    Future.microtask(
-        () => context.read<EditNoteViewModel>().loadNoteAsync(widget.noteId));
-    super.initState();
-  }
+class _Body extends StatelessWidget {
+  const _Body({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var vm = context.watch<AddNoteViewModel>();
+
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save_alt),
-            tooltip: 'Update',
-            onPressed: () {},
-          ),
-        ],
+        title: Text(appTitle),
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.save),
+        tooltip: save,
+        onPressed: () =>
+            context.read<AddNoteViewModel>().onSaveNoteSelectedAction(),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            _NoteTitle(),
-            _NoteContent(),
-          ],
-        ),
+        child: vm.isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: <Widget>[
+                  _NoteTitle(),
+                  _NoteContent(),
+                ],
+              ),
       ),
     );
   }
@@ -70,7 +61,7 @@ class _NoteContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vm = context.watch<EditNoteViewModel>();
+    var vm = context.watch<AddNoteViewModel>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -79,11 +70,12 @@ class _NoteContent extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.newline,
+            textInputAction: TextInputAction.done,
             maxLines: null,
             controller: vm.contentController,
             decoration: InputDecoration(
               border: InputBorder.none,
+              hintText: whatIsOnYourMind,
             ),
           ),
         ),
@@ -99,7 +91,7 @@ class _NoteTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vm = context.watch<EditNoteViewModel>();
+    var vm = context.watch<AddNoteViewModel>();
 
     return Container(
       child: Padding(
@@ -112,8 +104,7 @@ class _NoteTitle extends StatelessWidget {
               child: TextFormField(
                 controller: vm.titleController,
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                ),
+                    border: UnderlineInputBorder(), hintText: noteTitle),
               ),
             ),
           ],

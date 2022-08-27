@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:note_bad/Modules/home/home_view_model.dart';
 import 'package:note_bad/Resources/notes_card.dart';
 import 'package:note_bad/Resources/constant_strings.dart';
-import 'package:note_bad/Services/notes_database.dart';
+import 'package:note_bad/screens/home/home_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -38,40 +37,35 @@ class _BodyState extends State<_Body> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () =>
+            context.read<HomeViewModel>().onAddNoteSelectedAction(),
         child: Icon(Icons.add),
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.blue,
       ),
       appBar: AppBar(
         title: Text(
           appTitle,
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            tooltip: refresh,
-            onPressed: () {},
-          ),
-        ],
       ),
       body: vm.isLoading
           ? _LoadingWidget()
-          : vm.notesList != null
+          : vm.notesList != null && vm.notesList.length != 0
               ? _NotesList()
-              : Center(
-                  child: Text(
-                    noNotes,
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        noNotes,
+                        style: TextStyle(fontSize: 24, color: Colors.black),
+                      ),
+                    ),
+                  ],
                 ),
     );
   }
 
-  @override
-  void dispose() {
-    NotesDatabase.instance.close();
-    super.dispose();
-  }
+
 }
 
 class _LoadingWidget extends StatelessWidget {
@@ -85,6 +79,7 @@ class _LoadingWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(),
             Text(loadingNotes),
@@ -114,23 +109,8 @@ class _NotesList extends StatelessWidget {
             StaggeredTile.count(2, index.isEven ? 2 : 1.5),
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              // setState(() {
-              //   BlocProvider.of<HomeBloc>(context)
-              //       .add(NoteSelected(index: note.id));
-              //   Future.delayed(Duration.zero, () {
-              //     Navigator.of(context).push(
-              //       MaterialPageRoute(
-              //           builder: (context) => NotePage(
-              //                 noteId: note.id,
-              //               )),
-              //     );
-              //   });
-              //   BlocProvider.of<NoteBloc>(context)
-              //       .add(EditNote(note.id));
-              //   loadNotes();
-              // });
-            },
+            onTap: () =>
+                context.read<HomeViewModel>().onNoteSelectedAction(index),
             child: NotesCard(
               index: index,
               note: vm.notesList[index],
